@@ -137,7 +137,7 @@ int32_t NX_CV4l2Camera::V4l2OpenDevices()
 
 	if (m_iClipperVideoFd < 0)
 	{
-		NxDbgMsg( NX_DBG_ERR, "Fail, nx_v4l2_open_device(clipper_video).\n" );
+		NxDbgMsg( NX_DBG_ERR, "Fail, nx_v4l2_open_device(clipper_video) module=%d .\n", m_iModule );
 		return -1;
 	}
 

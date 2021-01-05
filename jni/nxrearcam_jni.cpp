@@ -150,7 +150,7 @@ static int GetSingleParameter(const char *param, int* arg)
 	{
 		return -1;
 	}
-	
+
 
 	return 1;
 }
@@ -194,7 +194,7 @@ static int GetComplexParameter(const char *param, int* arg1, int*arg2)
 	{
 		return -1;
 	}
-	
+
 
 	return 1;
 }
@@ -204,7 +204,7 @@ static void CalAspectRatio(int lcd_width, int lcd_height, int cam_width, int cam
 	int dp_w, dp_h;
 	int margin_w, margin_h;
 
-	margin_w = (lcd_width / 20); 
+	margin_w = (lcd_width / 20);
 	margin_h = (lcd_height / 20);
 
 	if(lcd_width > lcd_height)
@@ -253,33 +253,6 @@ JNIEXPORT jint JNICALL NX_JniNxRearCamSetParam( JNIEnv *env, jclass obj, jint lc
 	stRearCam_Param.use_intercam 	= 1;
 	stRearCam_Param.pgl_en 			= 0;
 
-#ifndef GET_QUICKREARCAM_PARAM
-	stRearCam_Param.module 		= DEFAULT_MODULE;
-	stRearCam_Param.connectorId 	= DEFAULT_CONNECTOR_ID;
-	stRearCam_Param.crtcId			= DEFAULT_CRTC_ID;
-	stRearCam_Param.videoPlaneId	= DEFAULT_VIDEO_PLANE;
-	stRearCam_Param.cam_width		= DEFAULT_CAM_WIDTH;
-	stRearCam_Param.cam_height		= DEFAULT_CAM_HEIGHT;
-	stRearCam_Param.deinter_engine	= DEFAULT_DEINTER_ENGINE;
-	stRearCam_Param.deinter_corr	= DEFAULT_DEINTER_SENSE;
-	stRearCam_Param.lcd_w			= lcd_width;
-	stRearCam_Param.lcd_h			= lcd_height;
-
-#ifndef FULLSCREEN_DSIPLAY
-	stRearCam_Param.dp_w			= DEFAULT_DP_WIDTH;
-	stRearCam_Param.dp_h			= DEFAULT_DP_HEIGHT;
-	stRearCam_Param.dp_x			= DEFAULT_DP_X;
-	stRearCam_Param.dp_y			= DEFAULT_DP_Y;
-	//CalAspectRatio(lcd_width, lcd_height, 	stRearCam_Param.cam_width, stRearCam_Param.cam_height, &stRearCam_Param.dp_w, &stRearCam_Param.dp_h);
-	//CalDisplayPosition(lcd_width, lcd_height, stRearCam_Param.dp_w, stRearCam_Param.dp_h, &stRearCam_Param.dp_x, &stRearCam_Param.dp_y);
-#else
-	stRearCam_Param.dp_w 	= lcd_width;
-	stRearCam_Param.dp_h	= lcd_height;
-	stRearCam.Param.dp_x	= 0;
-	stRearCam.Param.dp_y	= 0;
-#endif
-#else
-	
 	iRet = GetSingleParameter(rearcam_module, &stRearCam_Param.module);
 	if(iRet <0) stRearCam_Param.module = DEFAULT_MODULE;
 
@@ -293,7 +266,7 @@ JNIEXPORT jint JNICALL NX_JniNxRearCamSetParam( JNIEnv *env, jclass obj, jint lc
 	if(iRet <0) stRearCam_Param.videoPlaneId = DEFAULT_VIDEO_PLANE;
 
 	iRet = GetComplexParameter(rearcam_cam_res, &stRearCam_Param.cam_width, &stRearCam_Param.cam_height);
-	if(iRet <0) 
+	if(iRet <0)
 	{
 		stRearCam_Param.cam_width = DEFAULT_CAM_WIDTH;
 		stRearCam_Param.cam_height = DEFAULT_CAM_HEIGHT;
@@ -306,26 +279,30 @@ JNIEXPORT jint JNICALL NX_JniNxRearCamSetParam( JNIEnv *env, jclass obj, jint lc
 	if(iRet <0) stRearCam_Param.deinter_corr = DEFAULT_DEINTER_SENSE;
 
 	iRet = GetComplexParameter(rearcam_display_pos, &stRearCam_Param.dp_x, &stRearCam_Param.dp_y);
-	if(iRet <0) 
+	if(iRet <0)
 	{
 		stRearCam_Param.dp_x = DEFAULT_DP_X;
 		stRearCam_Param.dp_y = DEFAULT_DP_Y;
 	}
 
 	iRet = GetComplexParameter(rearcam_dispaly_size, &stRearCam_Param.dp_w, &stRearCam_Param.dp_h);
-	if(iRet <0) 
+	if(iRet <0)
 	{
 		stRearCam_Param.dp_w = DEFAULT_DP_WIDTH;
 		stRearCam_Param.dp_h = DEFAULT_DP_HEIGHT;
 	}
 
 	iRet = GetComplexParameter(rearcam_lcd_res, &stRearCam_Param.lcd_w, &stRearCam_Param.lcd_h);
-	if(iRet <0) 
+	if(iRet <0)
 	{
 		stRearCam_Param.lcd_w = DEFAULT_LCD_WIDTH;
 		stRearCam_Param.lcd_h = DEFAULT_LCD_HEIGHT;
 	}
-
+#ifdef FULLSCREEN_DSIPLAY
+	stRearCam_Param.dp_w 	= lcd_width;
+	stRearCam_Param.dp_h	= lcd_height;
+	stRearCam.Param.dp_x	= 0;
+	stRearCam.Param.dp_y	= 0;
 #endif
 
 	if(stRearCam_Param.module == 6 || stRearCam_Param.module == 9)  //TP2825
